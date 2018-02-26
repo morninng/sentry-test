@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import * as Raven from 'raven-js';
 
+// import * as EventEmitter from 'events'
+// const EventEmitter = require('events').EventEmitter;
+
+
+declare var window: any;
 
 @Component({
   selector: 'app-root',
@@ -9,6 +14,20 @@ import * as Raven from 'raven-js';
 })
 export class AppComponent implements OnInit {
   title = 'app';
+
+  @HostListener('window:onerror')
+  onError() {
+
+    console.log('host listener error');
+
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+
+    console.log('host listener resize');
+
+  }
 
 
   ngOnInit(){
@@ -30,11 +49,61 @@ export class AppComponent implements OnInit {
       extra: {planet: {name: 'Earth'}}
     }, function () { /* ... */ });
 
+
+
+
+    this.set_event_emitter();
+
+    setTimeout( () => {
+      this.createErrorWithCatch();
+    }, 100);
+
   }
 
+
+  set_event_emitter() {
+
+    // const ev = new EventEmitter();
+    // ev.on('error', (err) => {
+    //   console.log('-------------error', err);
+    // });
+
+    console.log('addEventListener');
+    window.addEventListener('error', (err) => {
+
+      console.log('addEventListener result', err);
+    });
+
+    window.addEventListener('resize', (err) => {
+
+      console.log('addEventListener result resize', err);
+    });
+
+  }
+
+  createErrorWithCatch(){
+
+    try {
+
+      console.log('createErrorWithCatch try');
+      throw new Error('createErrorWithCatch try');
+
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+
+
   create_error() {
-    console.log('create_error');
-    throw new Error('create_error');
+    console.log('create_error without try catch');
+    throw new Error('create_error without try catch');
+  }
+
+  createErrorWithoutCatch(){
+    console.log('createErrorWithoutCatch');
+    throw new Error('createErrorWithoutCatch');
+    
   }
 
   create_error_x() {

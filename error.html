@@ -1,0 +1,30 @@
+<html>
+<head></head>
+<body>
+
+<script>
+
+try{
+
+    setTimeout(function(){
+        throw new Error('aaa');
+    },500);
+
+    throw new Error('bbb');
+
+}catch(err){
+    console.log('catch', err);
+}
+
+window.addEventListener('error', function(err) {
+    console.log('addeventlistener error', err);
+});
+
+
+</script>
+
+
+
+</body>
+
+</html>
